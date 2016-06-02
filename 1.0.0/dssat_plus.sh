@@ -1,5 +1,35 @@
 #! /bin/bash
 
+# Check if the number of parameters is correct
+if [ $# -ne 6 ]
+then
+    echo "Usage: dssat_plus.sh <model_version> <json_input> <cultivar_input> <acmo_output> <dssat_input> <dssat_output>"
+    exit -1
+fi
+
+THISDIR=`pwd`
+#Uncomment the following line to trap the exceution somewhere
+#THISDIR="/scratch/wrf/scratch/dssat_plus"
+cd $THISDIR
+
+SOURCE="${BASH_SOURCE[0]}"
+while [ -h "$SOURCE" ]; do # resolve $SOURCE until the file is no longer a symlink
+  DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
+  SOURCE="$(readlink "$SOURCE")"
+  [[ $SOURCE != /* ]] && SOURCE="$DIR/$SOURCE" # if $SOURCE was a relative symlink, we need to resolve it relative to the path where the symlink file was located
+done
+DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
+
+# Save a copy of a command line for fast debug
+cat > `basename $0`_debug.sh << EOF
+source $DIR/env.sh
+$0 $@
+EOF
+
+chmod +x `basename $0`_debug.sh
+
+####################################################################
+
 modelVersion=$1
 JsonInput=$2
 CultivarInput=$3
